@@ -16,7 +16,7 @@ services:
     container_name: mongo1
     restart: always
     ports:
-      - 27017:27017
+      - 37017:27017
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=123456
@@ -41,7 +41,7 @@ services:
     container_name: mongo2
     restart: always
     ports:
-      - 27018:27017
+      - 37018:27017
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=123456
@@ -66,7 +66,7 @@ services:
     container_name: mongo3
     restart: always
     ports:
-      - 27019:27017
+      - 37019:27017
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=123456
