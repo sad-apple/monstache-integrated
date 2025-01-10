@@ -1,0 +1,13 @@
+#
+# ** THIS IS AN AUTO-GENERATED FILE **
+#
+
+# Default Kibana configuration for docker target
+server.host: "0.0.0.0"
+server.shutdownTimeout: "5s"
+elasticsearch.hosts: [ "http://elastic-single:9200" ]
+  #elasticsearch.hosts: [ "http://172.168.1.21:9201", "http://172.168.1.21:9202", "http://172.168.1.21:9203", "http://172.168.14.244:9201" ]
+  #elasticsearch.hosts: [ "http://172.168.1.21:9201", "http://172.168.1.21:9202", "http://172.168.1.21:9203"]
+monitoring.ui.container.elasticsearch.enabled: true
+i18n.locale: "zh-CN"
+

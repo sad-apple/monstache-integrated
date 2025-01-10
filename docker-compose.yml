@@ -1,0 +1,151 @@
+version: "3"
+
+services:
+
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    volumes:
+      - certs:/usr/share/kibana/config/certs
+      - kibanadata:/usr/share/kibana
+      - kibanadata/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - ${KIBANA_PORT}:5601
+    environment:
+      #      - ELASTICSEARCH_HOSTS=https://es01:9200
+      #- ELASTICSEARCH_HOSTS=http://172.168.1.21:9201
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+#      - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=config/certs/ca/ca.crt
+    mem_limit: ${MEM_LIMIT}
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
+    networks:
+      - monstacheNet
+
+  elastic-single:
+    image: elasticsearch:7.17.3
+    volumes:
+      - ./data/elasticsearch/plugins:/usr/share/elasticsearch/plugins
+      - ./data/elasticsearch/data:/usr/share/elasticsearch/data
+    environment:
+      - "discovery.type=single-node"
+      - "cluster.name=elasticsearch"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx1024m"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - monstacheNet
+
+  monstache:
+    image: rwynn/monstache:rel6
+    container_name: monstache
+    volumes:
+      - ./data/monstache/config/monstache-local.config.toml:/app/monstache.config.toml
+    command: -f /app/monstache.config.toml
+    networks:
+      - monstacheNet
+
+
+  # mongodb集群
+  #主节点
+  mongodb1:
+    image: mongo:6.0.2
+    container_name: mongo1
+    restart: always
+    ports:
+      - 37017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+    command: mongod --replSet rs0 --keyFile /mongodb.key
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - ./data/mongodb/mongo1/data:/data/db
+      - ./data/mongodb/mongo1/configdb:/data/configdb
+      - ./data/mongodb/mongo1/mongodb.key:/mongodb.key
+    networks:
+      - monstacheNet
+    entrypoint:
+      - bash
+      - -c
+      - |
+        chmod 400 /mongodb.key
+        chown 999:999 /mongodb.key
+        exec docker-entrypoint.sh $$@
+  # 副节点
+  mongodb2:
+    image: mongo:6.0.2
+    container_name: mongo2
+    restart: always
+    ports:
+      - 37018:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+    command: mongod --replSet rs0 --keyFile /mongodb.key
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - ./data/mongodb/mongo2/data:/data/db
+      - ./data/mongodb/mongo2/configdb:/data/configdb
+      - ./data/mongodb/mongo2/mongodb.key:/mongodb.key
+    networks:
+      - monstacheNet
+    entrypoint:
+      - bash
+      - -c
+      - |
+        chmod 400 /mongodb.key
+        chown 999:999 /mongodb.key
+        exec docker-entrypoint.sh $$@
+  # 副节点
+  mongodb3:
+    image: mongo:6.0.2
+    container_name: mongo3
+    restart: always
+    ports:
+      - 37019:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+    command: mongod --replSet rs0 --keyFile /mongodb.key
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - ./data/mongodb/mongo3/data:/data/db
+      - ./data/mongodb/mongo3/configdb:/data/configdb
+      - ./data/mongodb/mongo3/mongodb.key:/mongodb.key
+    networks:
+      - monstacheNet
+    entrypoint:
+      - bash
+      - -c
+      - |
+        chmod 400 /mongodb.key
+        chown 999:999 /mongodb.key
+        exec docker-entrypoint.sh $$@
+networks:
+  monstacheNet:
+    driver: bridge
+
+volumes:
+  certs:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./data/certs
+      o: bind
+
+  kibanadata:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./data/kibanadata
+      o: bind
