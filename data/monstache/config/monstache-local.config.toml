@@ -1,6 +1,6 @@
 # connection settings
 
-# connect to MongoDB using the following URLmongo-url = "mongodb://ncgq_dev:njusc001@172.168.1.13:27017/ncgq_dev"
+# connect to MongoDB using the following URLmongo-url = "mongodb://ncgq:njusc001@172.168.1.13:27017/ncgq"
 # mongo-url = "mongodb://root:x+s9zI&VA!s@172.168.14.209:27017/?minPoolSize=2&maxPoolSize=10&maxIdleTimeMS=86400000"
 mongo-url = "mongodb://root:123456@172.168.14.209:37017/?minPoolSize=2&maxPoolSize=10&maxIdleTimeMS=86400000"
 # elasticsearch-urls = ["http://172.168.1.21:9201","http://172.168.1.21:9202","http://172.168.1.21:9203"]
@@ -10,14 +10,14 @@ elasticsearch-urls = ["http://172.168.14.209:9200"]
 
 # if you need to seed an index from a collection and not just listen and sync changes events
 # you can copy entire collections or views from MongoDB to Elasticsearch
-direct-read-namespaces = ["ncgq_dev.testView", "ncgq_dev.GQ_MEMBER_FAMILY"]
+direct-read-namespaces = ["ncgq.testView", "ncgq.GQ_MEMBER_FAMILY"]
 
 # if you want to use MongoDB change streams instead of legacy oplog tailing use change-stream-namespaces
 # change streams require at least MongoDB API 3.6+
 # if you have MongoDB 4+ you can listen for changes to an entire database or entire deployment
 # in this case you usually don't need regexes in your config to filter collections unless you target the deployment.
 # to listen to an entire db use only the database name.  For a deployment use an empty string.
-change-stream-namespaces = ["ncgq_dev.GQ_MEMBER_FAMILY", "ncgq_dev.GQ_ORG", "ncgq_dev.testView"]
+change-stream-namespaces = ["ncgq.GQ_MEMBER_FAMILY", "ncgq.GQ_ORG", "ncgq.testView"]
 
 # additional settings
 
@@ -79,23 +79,23 @@ verbose = true
 #exit-after-direct-reads = false
 # 如果不设置则会自动创建index名称进行同步，如果设置映射的index名称则按照设置的名称创建index
 [[mapping]]
-namespace = "ncgq_dev.testView"
+namespace = "ncgq.testView"
 index = "family_pre_local_monstache"
 [[mapping]]
-namespace = "ncgq_dev.GQ_MEMBER_FAMILY"
+namespace = "ncgq.GQ_MEMBER_FAMILY"
 index = "gq_member_family"
 #type = "collection"
 
 [[relate]]
-namespace = "ncgq_dev.GQ_MEMBER_FAMILY" 
+namespace = "ncgq.GQ_MEMBER_FAMILY"
 # when a thing changes look it up in the assoicated view by _id and index that
-with-namespace = "ncgq_dev.testView"
+with-namespace = "ncgq.testView"
 keep-src = true 
 # ignore the original thing that changed and instead just use the lookup of that thing via the view
 
 [[relate]]                                                                                                                                                                                                                                                                 
-namespace = "ncgq_dev.GQ_ORG"                                                                                                                                                                                                                                    
+namespace = "ncgq.GQ_ORG"
 # when a thing changes look it up in the assoicated view by _id and index that                                                                                                                                                                                             
-with-namespace = "ncgq_dev.testView"  
+with-namespace = "ncgq.testView"
 match-field = "orgId"                                                                                                                                                                                                                                     
 keep-src = true    

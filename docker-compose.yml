@@ -5,12 +5,13 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
     volumes:
-      - certs:/usr/share/kibana/config/certs
-      - ./data/kibanadata:/usr/share/kibana
+#      - certs:/usr/share/kibana/config/certs
+#      - ./data/kibanadata:/usr/share/kibana
       - ./data/kibanadata/config/kibana.yml:/usr/share/kibana/config/kibana.yml
     ports:
       - ${KIBANA_PORT}:5601
     environment:
+      - SERVERNAME=kibana
       #      - ELASTICSEARCH_HOSTS=https://es01:9200
       #- ELASTICSEARCH_HOSTS=http://172.168.1.21:9201
       - ELASTICSEARCH_USERNAME=kibana_system
