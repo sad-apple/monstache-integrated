@@ -1,1 +1,13 @@
 /.idea/
+/data/elasticsearch/data/
+/data/elasticsearch/plugins/
+/data/mongodb/mongo1/data/
+/data/mongodb/mongo1/mongodb.key
+/data/mongodb/mongo1/configdb/
+/data/mongodb/mongo2/data/
+/data/mongodb/mongo2/mongodb.key
+/data/mongodb/mongo2/configdb/
+/data/mongodb/mongo3/data/
+/data/mongodb/mongo3/mongodb.key
+/data/mongodb/mongo3/configdb/
+/mongodb.key
