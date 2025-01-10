@@ -141,7 +141,7 @@ mongosh -u root -p 123456
 
 ```shell
 # 配置文件
-> config={_id:"rs1",members:[ 
+> config={_id:"rs0",members:[ 
 {_id:0,host:"172.168.14.209:37017"}, 
 {_id:1,host:"172.168.14.209:37018"}, 
 {_id:2,host:"172.168.14.209:37019"}] 
